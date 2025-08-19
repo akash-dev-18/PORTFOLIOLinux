@@ -1,0 +1,281 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Kali Linux Desktop Hacker Theme - All colors MUST be HSL */
+
+@layer base {
+  :root {
+    /* Dark desktop theme */
+    --background: 220 15% 8%;
+    --foreground: 120 100% 85%;
+
+    /* Window and card styling */
+    --card: 220 20% 12%;
+    --card-foreground: 120 60% 90%;
+
+    --popover: 220 25% 10%;
+    --popover-foreground: 120 100% 85%;
+
+    /* Kali Linux signature green */
+    --primary: 120 100% 50%;
+    --primary-foreground: 220 15% 8%;
+
+    /* Secondary electric blue */
+    --secondary: 200 100% 60%;
+    --secondary-foreground: 220 15% 8%;
+
+    /* Muted tones */
+    --muted: 220 15% 15%;
+    --muted-foreground: 120 30% 70%;
+
+    /* Accent purple */
+    --accent: 280 100% 70%;
+    --accent-foreground: 220 15% 8%;
+
+    /* Danger red */
+    --destructive: 0 100% 60%;
+    --destructive-foreground: 0 0% 98%;
+
+    /* Borders and inputs */
+    --border: 120 50% 30%;
+    --input: 220 20% 15%;
+    --ring: 120 100% 50%;
+
+    /* Window styling */
+    --window: 220 25% 10%;
+    --window-border: 120 80% 40%;
+    --taskbar: 220 30% 5%;
+    --taskbar-border: 120 60% 30%;
+
+    /* Glow effects */
+    --glow-primary: 120 100% 50%;
+    --glow-secondary: 200 100% 60%;
+    --glow-accent: 280 100% 70%;
+    
+    /* Terminal colors */
+    --terminal-bg: 220 25% 5%;
+    --terminal-text: 120 100% 80%;
+    --terminal-prompt: 120 100% 50%;
+
+    --radius: 0.25rem;
+
+    --sidebar-background: 0 0% 98%;
+
+    --sidebar-foreground: 240 5.3% 26.1%;
+
+    --sidebar-primary: 240 5.9% 10%;
+
+    --sidebar-primary-foreground: 0 0% 98%;
+
+    --sidebar-accent: 240 4.8% 95.9%;
+
+    --sidebar-accent-foreground: 240 5.9% 10%;
+
+    --sidebar-border: 220 13% 91%;
+
+    --sidebar-ring: 217.2 91.2% 59.8%;
+  }
+
+  .dark {
+    /* Same dark theme colors - Kali Linux style */
+    --background: 220 15% 8%;
+    --foreground: 120 100% 85%;
+
+    --card: 220 20% 12%;
+    --card-foreground: 120 60% 90%;
+
+    --popover: 220 25% 10%;
+    --popover-foreground: 120 100% 85%;
+
+    --primary: 120 100% 50%;
+    --primary-foreground: 220 15% 8%;
+
+    --secondary: 200 100% 60%;
+    --secondary-foreground: 220 15% 8%;
+
+    --muted: 220 15% 15%;
+    --muted-foreground: 120 30% 70%;
+
+    --accent: 280 100% 70%;
+    --accent-foreground: 220 15% 8%;
+
+    --destructive: 0 100% 60%;
+    --destructive-foreground: 0 0% 98%;
+
+    --border: 120 50% 30%;
+    --input: 220 20% 15%;
+    --ring: 120 100% 50%;
+
+    /* Keep same custom variables */
+    --window: 220 25% 10%;
+    --window-border: 120 80% 40%;
+    --taskbar: 220 30% 5%;
+    --taskbar-border: 120 60% 30%;
+    --glow-primary: 120 100% 50%;
+    --glow-secondary: 200 100% 60%;
+    --glow-accent: 280 100% 70%;
+    --terminal-bg: 220 25% 5%;
+    --terminal-text: 120 100% 80%;
+    --terminal-prompt: 120 100% 50%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground font-mono;
+    overflow: hidden; /* Desktop feel */
+  }
+
+  /* Custom scrollbar for hacker feel */
+  *::-webkit-scrollbar {
+    width: 8px;
+  }
+
+  *::-webkit-scrollbar-track {
+    background: hsl(var(--muted));
+  }
+
+  *::-webkit-scrollbar-thumb {
+    background: hsl(var(--primary));
+    border-radius: 4px;
+  }
+
+  *::-webkit-scrollbar-thumb:hover {
+    background: hsl(var(--secondary));
+  }
+}
+
+@layer components {
+  /* Window styling */
+  .window {
+    @apply bg-card border border-window-border rounded-sm shadow-2xl;
+    box-shadow: 0 0 20px hsl(var(--glow-primary) / 0.3);
+  }
+
+  .window-header {
+    @apply bg-muted border-b border-window-border p-2 flex items-center justify-between cursor-move;
+  }
+
+  .window-controls {
+    @apply flex gap-2;
+  }
+
+  .window-control {
+    @apply w-3 h-3 rounded-full cursor-pointer transition-all duration-200;
+  }
+
+  .window-control.close {
+    @apply bg-destructive hover:shadow-[0_0_10px_hsl(var(--destructive))] hover:scale-110;
+  }
+
+  .window-control.minimize {
+    @apply bg-accent hover:shadow-[0_0_10px_hsl(var(--accent))] hover:scale-110;
+  }
+
+  .window-control.maximize {
+    @apply bg-primary hover:shadow-[0_0_10px_hsl(var(--primary))] hover:scale-110;
+  }
+
+  /* Desktop folder styling */
+  .desktop-folder {
+    @apply flex flex-col items-center p-4 rounded cursor-pointer transition-all duration-300;
+    @apply hover:bg-muted/30 hover:shadow-[0_0_20px_hsl(var(--glow-primary)/0.4)];
+  }
+
+  .desktop-folder:hover .folder-icon {
+    @apply scale-110 drop-shadow-[0_0_10px_hsl(var(--primary))];
+  }
+
+  /* Taskbar styling */
+  .taskbar {
+    background: linear-gradient(90deg, hsl(var(--taskbar)), hsl(var(--taskbar) / 0.9));
+    border-top: 1px solid hsl(var(--taskbar-border));
+    backdrop-filter: blur(10px);
+  }
+
+  .taskbar-icon {
+    @apply p-2 rounded transition-all duration-200 cursor-pointer;
+    @apply hover:bg-muted/50 hover:shadow-[0_0_15px_hsl(var(--glow-primary)/0.5)];
+  }
+
+  /* Terminal styling */
+  .terminal {
+    @apply bg-terminal-bg text-terminal-text font-mono text-sm;
+    background: linear-gradient(135deg, hsl(var(--terminal-bg)), hsl(var(--terminal-bg) / 0.95));
+  }
+
+  .terminal-prompt {
+    @apply text-terminal-prompt;
+  }
+
+  /* Glow effects */
+  .glow-primary {
+    box-shadow: 0 0 20px hsl(var(--glow-primary) / 0.5);
+  }
+
+  .glow-secondary {
+    box-shadow: 0 0 20px hsl(var(--glow-secondary) / 0.5);
+  }
+
+  .glow-accent {
+    box-shadow: 0 0 20px hsl(var(--glow-accent) / 0.5);
+  }
+
+  /* Typewriter animation */
+  .typewriter {
+    border-right: 2px solid hsl(var(--primary));
+    animation: blink 1s infinite;
+  }
+
+  @keyframes blink {
+    0%, 50% { border-color: hsl(var(--primary)); }
+    51%, 100% { border-color: transparent; }
+  }
+
+  /* Kali dragon blink/glow animation */
+  .kali-dragon-blink {
+    animation: kaliDragonBlink 1.2s ease-in-out infinite;
+    filter: drop-shadow(0 0 0px hsl(var(--secondary)));
+  }
+
+  @keyframes kaliDragonBlink {
+    0% { opacity: 0; filter: drop-shadow(0 0 0px hsl(var(--secondary))); }
+    25% { opacity: 0.7; filter: drop-shadow(0 0 6px hsl(var(--secondary))); }
+    50% { opacity: 1; filter: drop-shadow(0 0 12px hsl(var(--secondary))); }
+    75% { opacity: 0.7; filter: drop-shadow(0 0 6px hsl(var(--secondary))); }
+    100% { opacity: 0; filter: drop-shadow(0 0 0px hsl(var(--secondary))); }
+  }
+
+  /* Attempt to hide white backgrounds by blending on black */
+  .kali-dragon-screen {
+    mix-blend-mode: screen; /* white becomes bright; on black background it disappears */
+  }
+
+  /* 3D open animations */
+  .window-3d-open {
+    animation: window3dOpen 400ms cubic-bezier(0.2, 0.8, 0.2, 1);
+    transform-origin: 50% 10%;
+  }
+
+  .terminal-3d-open {
+    animation: terminal3dOpen 450ms cubic-bezier(0.22, 1, 0.36, 1);
+    transform-origin: 50% 0%;
+  }
+
+  @keyframes window3dOpen {
+    0% { transform: perspective(800px) rotateX(-12deg) scale(0.96) translateY(-8px); opacity: 0; }
+    60% { transform: perspective(800px) rotateX(2deg) scale(1.02) translateY(2px); opacity: 1; }
+    100% { transform: perspective(800px) rotateX(0deg) scale(1) translateY(0); opacity: 1; }
+  }
+
+  @keyframes terminal3dOpen {
+    0% { transform: perspective(1000px) rotateX(-15deg) translateY(-10px) scale(0.95); opacity: 0; }
+    50% { transform: perspective(1000px) rotateX(3deg) translateY(2px) scale(1.03); opacity: 1; }
+    100% { transform: perspective(1000px) rotateX(0) translateY(0) scale(1); opacity: 1; }
+  }
+}
