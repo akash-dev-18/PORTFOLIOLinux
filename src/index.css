@@ -189,6 +189,7 @@
 
   .desktop-folder:hover .folder-icon {
     @apply scale-110 drop-shadow-[0_0_10px_hsl(var(--primary))];
+    animation: pulsate 0.5s ease-in-out;
   }
 
   /* Taskbar styling */
@@ -198,9 +199,9 @@
     backdrop-filter: blur(10px);
   }
 
-  .taskbar-icon {
-    @apply p-2 rounded transition-all duration-200 cursor-pointer;
-    @apply hover:bg-muted/50 hover:shadow-[0_0_15px_hsl(var(--glow-primary)/0.5)];
+  .taskbar-icon:hover {
+    @apply bg-muted/50 shadow-[0_0_15px_hsl(var(--glow-primary)/0.5)];
+    animation: pulsate 0.5s ease-in-out;
   }
 
   /* Terminal styling */

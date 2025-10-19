@@ -8,52 +8,52 @@ import {
   Clock,
   Shield
 } from 'lucide-react';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import * as z from 'zod';
 import { useState } from 'react';
 
+const contactSchema = z.object({
+  name: z.string().min(2, { message: "Name must be at least 2 characters." }),
+  email: z.string().email({ message: "Invalid email address." }),
+  subject: z.string().min(5, { message: "Subject must be at least 5 characters." }),
+  message: z.string().min(10, { message: "Message must be at least 10 characters." }),
+});
+
 export const Contact = () => {
-  const [formData, setFormData] = useState({
-    name: '',
-    email: '',
-    subject: '',
-    message: ''
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitStatus, setSubmitStatus] = useState<{ success: boolean; message: string } | null>(null);
+
+  const { register, handleSubmit, formState: { errors }, reset } = useForm({
+    resolver: zodResolver(contactSchema),
   });
 
-  const [isSubmitting, setIsSubmitting] = useState(false);
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
+  const onSubmit = async (data: z.infer<typeof contactSchema>) => {
     setIsSubmitting(true);
-    
-    try {
-      // Create mailto link with form data
-      const subject = encodeURIComponent(formData.subject);
-      const body = encodeURIComponent(
-        `Name: ${formData.name}\nEmail: ${formData.email}\n\nMessage:\n${formData.message}`
-      );
-      const mailtoLink = `mailto:akash1.dev2.ak@gmail.com?subject=${subject}&body=${body}`;
-      
-      // Open email client
-      window.location.href = mailtoLink;
-      
-      // Small delay for UX
-      await new Promise(resolve => setTimeout(resolve, 1000));
-      
-      setIsSubmitting(false);
-      setFormData({ name: '', email: '', subject: '', message: '' });
-      
-      // Success message
-      alert('Email client opened! Your message is ready to send.');
-    } catch (error) {
-      setIsSubmitting(false);
-      alert('Error opening email client. Please try again.');
-    }
-  };
+    setSubmitStatus(null);
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    setFormData(prev => ({
-      ...prev,
-      [e.target.name]: e.target.value
-    }));
+    try {
+      const response = await fetch('/api/contact', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data),
+      });
+
+      const result = await response.json();
+
+      if (response.ok) {
+        setSubmitStatus({ success: true, message: result.message });
+        reset();
+      } else {
+        setSubmitStatus({ success: false, message: result.message });
+      }
+    } catch (error) {
+      setSubmitStatus({ success: false, message: 'Something went wrong. Please try again later.' });
+    }
+
+    setIsSubmitting(false);
   };
 
   const socialLinks = [
@@ -100,57 +100,49 @@ export const Contact = () => {
               {'>'} send_message.sh
             </h2>
             
-            <form onSubmit={handleSubmit} className="space-y-4 font-mono">
+            <form onSubmit={handleSubmit(onSubmit)} className="space-y-4 font-mono">
               <div>
                 <label className="block text-sm text-primary mb-1">Name:</label>
                 <input
                   type="text"
-                  name="name"
-                  value={formData.name}
-                  onChange={handleChange}
+                  {...register('name')}
                   className="w-full bg-input border border-primary/30 rounded px-3 py-2 text-foreground focus:border-primary focus:ring-1 focus:ring-primary"
                   placeholder="Enter your name..."
-                  required
                 />
+                {errors.name && <p className="text-red-500 text-xs mt-1">{errors.name.message}</p>}
               </div>
               
               <div>
                 <label className="block text-sm text-primary mb-1">Email:</label>
                 <input
                   type="email"
-                  name="email"
-                  value={formData.email}
-                  onChange={handleChange}
+                  {...register('email')}
                   className="w-full bg-input border border-primary/30 rounded px-3 py-2 text-foreground focus:border-primary focus:ring-1 focus:ring-primary"
                   placeholder="your.email@domain.com"
-                  required
                 />
+                {errors.email && <p className="text-red-500 text-xs mt-1">{errors.email.message}</p>}
               </div>
               
               <div>
                 <label className="block text-sm text-primary mb-1">Subject:</label>
                 <input
                   type="text"
-                  name="subject"
-                  value={formData.subject}
-                  onChange={handleChange}
+                  {...register('subject')}
                   className="w-full bg-input border border-primary/30 rounded px-3 py-2 text-foreground focus:border-primary focus:ring-1 focus:ring-primary"
                   placeholder="What's this about?"
-                  required
                 />
+                {errors.subject && <p className="text-red-500 text-xs mt-1">{errors.subject.message}</p>}
               </div>
               
               <div>
                 <label className="block text-sm text-primary mb-1">Message:</label>
                 <textarea
-                  name="message"
-                  value={formData.message}
-                  onChange={handleChange}
+                  {...register('message')}
                   rows={4}
                   className="w-full bg-input border border-primary/30 rounded px-3 py-2 text-foreground focus:border-primary focus:ring-1 focus:ring-primary resize-none"
                   placeholder="Type your message here..."
-                  required
                 />
+                {errors.message && <p className="text-red-500 text-xs mt-1">{errors.message.message}</p>}
               </div>
               
               <button
@@ -170,6 +162,11 @@ export const Contact = () => {
                   </>
                 )}
               </button>
+              {submitStatus && (
+                <p className={`text-sm mt-2 ${submitStatus.success ? 'text-green-500' : 'text-red-500'}`}>
+                  {submitStatus.message}
+                </p>
+              )}
             </form>
           </div>
 
